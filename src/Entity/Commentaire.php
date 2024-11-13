@@ -24,9 +24,13 @@ class Commentaire
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'commentaires')]
     private $posteCom;
 
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'likecommentaires')]
+    private $likeCom;
+
     public function __construct()
     {
         $this->posteCom = new ArrayCollection();
+        $this->likeCom = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -78,6 +82,32 @@ class Commentaire
     public function removePosteCom(User $posteCom): self
     {
         $this->posteCom->removeElement($posteCom);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getLikeCom(): Collection
+    {
+        return $this->likeCom;
+    }
+
+    public function addLikeCom(User $likeCom): self
+    {
+        if (!$this->likeCom->contains($likeCom)) {
+            $this->likeCom[] = $likeCom;
+            $likeCom->addLikeCom($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLikeCom(User $likeCom): self
+    {
+        $this->likeCom->removeElement($likeCom);
+        $likecommentaire->removeLikecommentaire($this);
 
         return $this;
     }

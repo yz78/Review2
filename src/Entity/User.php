@@ -52,10 +52,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Video::class, mappedBy: 'likeVideo')]
     private $videos;
 
+    #[ORM\ManyToMany(targetEntity: Commentaire::class, inversedBy: 'likeCom')]
+    #[ORM\JoinTable(
+        name: 'likeCom', // Nom de la table de jointure
+    )]
+    private $likecommentaires;
+
     public function __construct()
     {
         $this->commentaires = new ArrayCollection();
         $this->videos = new ArrayCollection();
+        $this->likecommentaires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -268,6 +275,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->videos->removeElement($video)) {
             $video->removeLikeVideo($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commentaire>
+     */
+    public function getLikecommentaires(): Collection
+    {
+        return $this->likecommentaires;
+    }
+
+    public function addLikecommentaire(Commentaire $likecommentaire): self
+    {
+        if (!$this->likecommentaires->contains($likecommentaire)) {
+            $this->likecommentaires[] = $likecommentaire;
+            
+        }
+
+        return $this;
+    }
+
+    public function removeLikecommentaire(Commentaire $likecommentaire): self
+    {
+        if ($this->likecommentaires->removeElement($likecommentaire)) {
+            
         }
 
         return $this;

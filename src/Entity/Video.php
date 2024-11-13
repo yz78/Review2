@@ -30,9 +30,17 @@ class Video
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'videos')]
     private $likeVideo;
 
+    #[ORM\ManyToOne(targetEntity: CreateurContenu::class, inversedBy: 'videos')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $createur;
+
+    #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'videos')]
+    private $categories;
+
     public function __construct()
     {
         $this->likeVideo = new ArrayCollection();
+        $this->categories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -108,6 +116,42 @@ class Video
     public function removeLikeVideo(User $likeVideo): self
     {
         $this->likeVideo->removeElement($likeVideo);
+
+        return $this;
+    }
+
+    public function getCreateur(): ?CreateurContenu
+    {
+        return $this->createur;
+    }
+
+    public function setCreateur(?CreateurContenu $createur): self
+    {
+        $this->createur = $createur;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Categorie>
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    public function addCategory(Categorie $category): self
+    {
+        if (!$this->categories->contains($category)) {
+            $this->categories[] = $category;
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Categorie $category): self
+    {
+        $this->categories->removeElement($category);
 
         return $this;
     }
