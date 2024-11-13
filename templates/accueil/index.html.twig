@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Review{% endblock %}
+
+{% block body %}
+<style>
+    /* Couleurs principales */
+        :root {
+            --color-bg: #221e1f;
+            --color-primary: #2f32dc;
+            --color-secondary: #4525d0;
+            --color-tertiary: #5c19c4;
+            --color-accent: #730db8;
+        }
+
+        /* Styles de base */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: var(--color-bg);
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            color: var(--color-primary);
+            font-size: 3em;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: var(--color-tertiary);
+            font-size: 1.2em;
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .cta-button {
+            background-color: var(--color-secondary);
+            color: #fff;
+            padding: 10px 20px;
+            font-size: 1em;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .cta-button:hover {
+            background-color: var(--color-accent);
+        }
+</style>
+
+<body>
+    <h1><img src="{{ asset('image/logo.png') }}" alt="Logo Review Original"></h1>
+
+    <p>Découvrez les critiques et avis les plus détaillés sur vos films et séries préférés.</p>
+    <a href="#" class="cta-button">Commencer à explorer</a>
+</body>
+{% endblock %}
