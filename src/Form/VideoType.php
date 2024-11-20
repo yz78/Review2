@@ -12,14 +12,22 @@ class VideoType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('titre')
-            ->add('datePublication')
-            ->add('lien')
-            ->add('favoris')
-            ->add('likeVideo')
-            ->add('createur')
-            ->add('categories')
-        ;
+            ->add('titre', null, [
+                'label' => 'Titre de la vidéo',
+                'attr' => ['placeholder' => 'Entrez le titre'],
+            ])
+            ->add('lien', null, [
+                'label' => 'Lien de la vidéo',
+                'attr' => ['placeholder' => 'Entrez le lien'],
+            ])
+            // ->add('createur', null, [
+            //     'label' => 'Nom du créateur',
+            //     'attr' => ['placeholder' => 'Entrez le nom du créateur'],
+            // ])
+            ->add('categories', null, [
+                'label' => 'Catégories',
+                'attr' => ['placeholder' => 'Entrez les catégories séparées par des virgules'],
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

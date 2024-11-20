@@ -18,7 +18,7 @@ class Video
     #[ORM\Column(type: 'string', length: 255)]
     private $titre;
 
-    #[ORM\Column(type: 'date')]
+    #[ORM\Column(type: 'datetime')]
     private $datePublication;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -31,7 +31,7 @@ class Video
     private $likeVideo;
 
     #[ORM\ManyToOne(targetEntity: CreateurContenu::class, inversedBy: 'videos')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private $createur;
 
     #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'videos')]
@@ -41,6 +41,7 @@ class Video
     {
         $this->likeVideo = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->datePublication = new \DateTime();
     }
 
     public function getId(): ?int

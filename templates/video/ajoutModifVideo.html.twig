@@ -1,0 +1,104 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Enregistrer une Vidéo{% endblock %}
+
+{% block body %}
+<style>
+    /* Couleurs principales */
+    :root {
+        --color-bg: #221e1f;
+        --color-primary: #2f32dc;
+        --color-secondary: #4525d0;
+        --color-tertiary: #5c19c4;
+        --color-accent: #730db8;
+    }
+
+    /* Styles de base */
+    body {
+        margin-top : 100px;
+        font-family: Arial, sans-serif;
+        background-color: var(--color-bg);
+        color: #ffffff;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .form-container {
+        background-color: var(--color-secondary);
+        border-radius: 10px;
+        padding: 20px;
+        width: 100%;
+        max-width: 600px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .form-container h1 {
+        color: white;
+        font-size: 2.5em;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .form-container label {
+        color: #ffffff;
+        font-weight: bold;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .form-container input[type="text"],
+    .form-container input[type="number"],
+    .form-container input[type="url"],
+    .form-container select,
+    .form-container textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: none;
+        border-radius: 5px;
+        background-color: var(--color-bg);
+        color: #fff;
+        font-size: 1em;
+    }
+
+    .form-container input[type="checkbox"] {
+        margin-right: 10px;
+    }
+
+    .form-container button {
+        background-color: var(--color-primary);
+        color: #fff;
+        padding: 10px 20px;
+        font-size: 1em;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        transition: background-color 0.3s ease;
+    }
+
+    .form-container button:hover {
+        background-color: var(--color-accent);
+    }
+
+    .form-container .success-message {
+        margin-top: 20px;
+        color: var(--color-primary);
+        text-align: center;
+    }
+</style>
+
+<div class="form-container">
+    <h1>Enregistrer votre vidéo</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+        <button type="submit">Sauvegarder</button>
+    {{ form_end(form) }}
+
+    
+</div>
+{% endblock %}
