@@ -83,4 +83,12 @@ class VideoController extends AbstractController
 
         return $this->redirectToRoute('app_listevideo');
     }
+
+    #[Route('/video/{id}', name: 'ficheVideo', methods:("GET"))]
+    public function ficheVideo(Video $video): Response
+    {
+        return $this->render('video/ficheVideo.html.twig', [
+            'laVideo' => $video
+        ]);
+    }
 }

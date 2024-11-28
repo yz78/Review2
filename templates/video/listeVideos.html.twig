@@ -213,14 +213,14 @@ iframe {
                 <h2>{{ laVideo.titre }}</h2>
             </div>
             <div class="video-body">
-                {# <a href="https://www.youtube.com/watch?v={{ laVideo.youtubeId }}" target="_blank">
+                <a href="{{path('ficheVideo', { id: laVideo.id })}}" target="_blank">
                     <img src="https://img.youtube.com/vi/{{ laVideo.youtubeId }}/0.jpg" alt="Aperçu de la vidéo {{ laVideo.titre }}" width="300">
-                 </a> #}
-                {% if laVideo.youtubeId %}
+                 </a>
+                {# {% if laVideo.youtubeId %}
                     <iframe src="https://www.youtube.com/embed/{{ laVideo.youtubeId }}" allowfullscreen></iframe>
                 {% else %}
                     <p>Lien : <a href="{{ laVideo.lien }}" target="_blank">{{ laVideo.lien }}</a></p>
-                {% endif %}
+                {% endif %} #}
                 <p><strong>Créateur :</strong> {{ laVideo.createur }}</p>
                 <p><strong>Date de publication :</strong> {{ laVideo.datePublication|date('d/m/Y H:i') }}</p>
             </div>
