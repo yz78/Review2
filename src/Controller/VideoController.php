@@ -8,86 +8,79 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Video; // Si vous utilisez une entité Video.
+use App\Entity\Video;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class VideoController extends AbstractController
 {
-    // #[Route('/video', name: 'app_video')]
-    // public function ajouterVideo(Request $request): Response
-    // {
-    //     $video = new Video(); 
-    //     $form = $this->createForm(VideoType::class, $video);
-
-    //     $form->handleRequest($request);
-
-    //     if ($form->isSubmitted() && $form->isValid()) {
-    //         // Si le formulaire est soumis et valide, persistez les données
-    //         $entityManager = $this->getDoctrine()->getManager();
-    //         $entityManager->persist($video);
-    //         $entityManager->flush();
-
-    //         $this->addFlash('success', 'Vous avez enregistré la vidéo avec succés !');
-
-    //         return $this->redirectToRoute('app_accueil');
-    //     }
-
-    //     return $this->render('video/ajoutVideo.html.twig', [
-    //         'form' => $form->createView(),
-    //     ]);
-    // }
-
-    #[Route('/list/Video', name: 'app_listevideo', methods:("GET"))]
-    public function listeVideos(VideoRepository $repo, Request $request): Response
+    #[Route('/list/Video', name: 'app_listevideo', methods: ["GET"])]
+    public function listeVideos(VideoRepository $repo): Response
     {
         $videos = $repo->findAll();
-    
+
         return $this->render('video/listeVideos.html.twig', [
-            'lesVideos' => $videos
+            'lesVideos' => $videos,
         ]);
     }
 
+    #[Route('/video', name: 'app_video', methods: ['GET', 'POST'])]
+    #[Route('/video/modif/{id}', name: 'app_video_modif', methods: ['GET', 'POST'])]
+    public function ajoutModifVideo(
+        Video $video = null, 
+        Request $request, 
+        EntityManagerInterface $manager
+    ): Response {
+        $isNew = $video === null;
 
+        if ($isNew) {
+            $video = new Video();
+            $mode = "ajoutée";
+        } else {
+            $mode = "modifiée";
+        }
 
-
-    #[Route('/video', name: 'app_video', methods:['GET','POST'])]
-    #[Route('/video/modif/{id}', name: 'app_video_modif', methods:['GET','POST'])]
-    public function ajoutModifVideo(Video $video=null, VideoRepository $repo, Request $request, EntityManagerInterface $manager): Response
-    {
-        if($video == null){
-            $video=new Video();
-            $mode="ajouté";
-        } else{
-            $mode="modifié";    
-        }     
-        $form=$this->createForm(VideoType::class, $video);
+        $form = $this->createForm(VideoType::class, $video);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
+            // Extraire l'ID YouTube depuis l'URL
+            $url = $video->getLien();
+            preg_match(
+                '/(?:https?:\/\/(?:www\.)?youtube\.com\/(?:[^\/]+\/\S+|(?:v|e(?:mbed)?)\/([^"&?\/\s]{11})))|(?:https?:\/\/(?:www\.)?youtu\.be\/([^"&?\/\s?]{11}))/',
+                $url,
+                $matches
+            );
+            
+            $youtubeId = $matches[2] ?? null;
+            
+            if ($youtubeId === null) {
+                $this->addFlash("danger", "L'URL YouTube est invalide !");
+                return $this->redirectToRoute($isNew ? 'app_video' : 'app_video_modif', ['id' => $video->getId()]);
+            }
+
+            $video->setYoutubeId($youtubeId);
+
             $manager->persist($video);
             $manager->flush();
+
             $this->addFlash("success", "La vidéo a bien été $mode !");
             return $this->redirectToRoute('app_listevideo');
         }
 
         return $this->render('video/ajoutModifVideo.html.twig', [
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ]);
-
     }
 
-    #[Route('/video/suppression/{id}', name: 'app_video_suppr', methods:("GET"))]
-    public function SuppressionAlbum(Video $video=null, VideoRepository $repo, Request $request, EntityManagerInterface $manager): Response
+    #[Route('/video/suppression/{id}', name: 'app_video_suppr', methods: ["GET"])]
+    public function SuppressionVideo(Video $video, EntityManagerInterface $manager): Response
     {
-        
-            $manager->remove($video);   
+        if ($video) {
+            $manager->remove($video);
             $manager->flush();
-            $this->addFlash("success", "La vidéo à bien été supprimé !");
-      
+            $this->addFlash("success", "La vidéo a bien été supprimée !");
+        }
+
         return $this->redirectToRoute('app_listevideo');
-
-    
     }
-
 }

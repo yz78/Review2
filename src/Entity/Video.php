@@ -27,6 +27,9 @@ class Video
     #[ORM\Column(type: 'boolean', nullable: true)]
     private $favoris;
 
+    #[ORM\Column(type: 'string', nullable: true)]
+    private $youtubeId;
+
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'videos')]
     private $likeVideo;
 
@@ -153,6 +156,18 @@ class Video
     public function removeCategory(Categorie $category): self
     {
         $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    public function getYoutubeId(): ?string
+    {
+        return $this->youtubeId;
+    }
+
+    public function setYoutubeId(?string $youtubeId): self
+    {
+        $this->youtubeId = $youtubeId;
 
         return $this;
     }
