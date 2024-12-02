@@ -18,7 +18,7 @@ class Video
     #[ORM\Column(type: 'string', length: 255)]
     private $titre;
 
-    #[ORM\Column(type: 'date')]
+    #[ORM\Column(type: 'datetime')]
     private $datePublication;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -27,11 +27,14 @@ class Video
     #[ORM\Column(type: 'boolean', nullable: true)]
     private $favoris;
 
+    #[ORM\Column(type: 'string', nullable: true)]
+    private $youtubeId;
+
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'videos')]
     private $likeVideo;
 
     #[ORM\ManyToOne(targetEntity: CreateurContenu::class, inversedBy: 'videos')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private $createur;
 
     #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'videos')]
@@ -41,6 +44,7 @@ class Video
     {
         $this->likeVideo = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->datePublication = new \DateTime();
     }
 
     public function getId(): ?int
@@ -152,6 +156,18 @@ class Video
     public function removeCategory(Categorie $category): self
     {
         $this->categories->removeElement($category);
+
+        return $this;
+    }
+
+    public function getYoutubeId(): ?string
+    {
+        return $this->youtubeId;
+    }
+
+    public function setYoutubeId(?string $youtubeId): self
+    {
+        $this->youtubeId = $youtubeId;
 
         return $this;
     }
