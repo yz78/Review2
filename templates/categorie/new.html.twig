@@ -1,8 +1,68 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Nouvelle Catégorie{% endblock %}
+{% block title %}Review | Nouvelle Catégorie{% endblock %}
+
 
 {% block body %}
+<style>
+:root {
+    --color-bg: #221e1f;
+    --color-primary: #2f32dc;
+    --color-secondary: #4525d0;
+    --color-tertiary: #5c19c4;
+    --color-accent: #730db8;
+}
+
+body {
+    color: #ffffff;
+    font-family: 'Arial', sans-serif;
+}
+
+.container {
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: #000;
+}
+
+h3 {
+    color: #ffffff;
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #fff;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-secondary);
+}
+
+.form-control {
+    border: 1px solid var(--color-tertiary);
+    border-radius: 5px;
+    padding: 0.5rem;
+}
+
+.form-label {
+    color: var(--color-tertiary);
+    font-weight: bold;
+}
+
+.btn-secondary {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-secondary);
+}
+
+</style>
+
 <div class="container py-5">
 <div style="margin-top: 100px;"></div>
     <section class="text-center mb-4">

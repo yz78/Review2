@@ -103,53 +103,6 @@ body {
         
 
      /* Footer */
-<style>.footer {
-    background-color: var(--color-bg);
-    color: #ffffff;
-    padding: 15px 0;
-    width: 100%;
-    position: relative;
-    bottom: 0;
-    text-align: left; /* Centrer le texte horizontalement */
-    padding-left: 500px;
-    font-size: 0.8em;
-}
-.footer a {
-    color: var(--color-accent);
-    text-decoration: none;
-    transition: color 0.3s;
-    font-size: 0.7em;
-}
-.footer a:hover {
-    color: var(--color-primary);
-}</style>
-
-
-
-
-        
-
-     /* Footer */
-<style>.footer {
-    background-color: var(--color-bg);
-    color: #ffffff;
-    padding: 15px 0;
-    width: 100%;
-    position: relative;
-    bottom: 0;
-    text-align: left; /* Centrer le texte horizontalement */
-    padding-left: 500px;
-    font-size: 0.8em;
-}
-.footer a {
-    color: var(--color-accent);
-    text-decoration: none;
-    transition: color 0.3s;
-    font-size: 0.7em;
-}
-.footer a:hover {
-    color: var(--color-primary);
-}</style>
 
 
 
@@ -167,20 +120,22 @@ body {
                     <a href="/" class="nav-link">Accueil</a>
                 </li>
                 <li class="nav-item active">
-                    <a href="{{ path('app_categorie_index') }}" class="nav-link">categorie</a>
+                    <a href="{{ path('app_categorie_index') }}" class="nav-link">Catégorie</a>
                 </li>
             
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Vidéos</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="/">Mes vidéos</a>
-                        <a class="dropdown-item" href="/">toute les vidéos</a>
+                        <a class="dropdown-item" href="/list/Video">Mes vidéos</a>
+                        <a class="dropdown-item" href="/">Toutes les vidéos</a>
                     </div>
                 </li>
                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">utilisateur</a>
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Utilisateurs</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="{{ path('app_user_index') }}">tout les utilisateur</a>
+                        {# <a class="dropdown-item" href="{{ path('app_user_index') }}">tout les utilisateur</a>
+                        <a class="dropdown-item" href="{{ path('app_user_index') }}">Créateurs de contenu</a>
+                        <a class="dropdown-item" href="{{ path('app_user_index') }}">Viewers</a> #}
                     </div>
                 </li>
                 {# <li class="nav-item"><a href="#" class="nav-link">Séries</a></li> #}
@@ -228,18 +183,6 @@ body {
         </div>
     </footer>
 
-
-
-<footer class="footer mt-auto  text-center">
-        <div class="container">
-            <p class="text-light">&copy; 2025 - Review Original | Tous droits réservés</p>
-            <p>
-                <a href="#" class="text-light mx-2">Mentions légales</a> |
-                <a href="#" class="text-light mx-2">Politique de confidentialité</a> |
-                <a href="#" class="text-light mx-2">Contact</a>
-            </p>
-        </div>
-    </footer>
 
 
 </html>
