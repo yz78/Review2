@@ -213,7 +213,7 @@ iframe {
                 <h2>{{ laVideo.titre }}</h2>
             </div>
             <div class="video-body">
-                <a href="{{path('allficheVideo', { id: laVideo.id })}}" target="_blank">
+                <a href="{{path('allficheVideo', { id: laVideo.id })}}" >
                     <img src="https://img.youtube.com/vi/{{ laVideo.youtubeId }}/0.jpg" alt="Aperçu de la vidéo {{ laVideo.titre }}" width="300">
                  </a>
                 {# {% if laVideo.youtubeId %}

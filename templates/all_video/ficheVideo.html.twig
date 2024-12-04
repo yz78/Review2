@@ -17,6 +17,27 @@
         padding: 20px;
     }
 
+    .back-button {
+        top: 20px;
+        left: 20px;
+        background-color: #5c19c4;
+        color: #ffffff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .back-button:hover {
+        background-color: #730db8;
+        color: #ffffff;
+        text-decoration: none;
+    }
+
     .video-header {
         text-align: left;
         margin-bottom: 30px;
@@ -88,31 +109,77 @@
         transition: background-color 0.3s ease, transform 0.2s ease;
     }
 
-    .video-actions a.edit {
-        background-color: #f39c12; /* Bouton Modifier (orange) */
-    }
-
-    .video-actions a.edit:hover {
-        background-color: #e67e22;
-    }
-
-    .video-actions a.delete {
-        background-color: #e74c3c; /* Bouton Supprimer (rouge) */
-    }
-
-    .video-actions a.delete:hover {
-        background-color: #c0392b;
-    }
-
+    
     iframe {
         width: 100%;
         height: 575px;
         border: none;
     }
+
+    .comments-section {
+        margin-top: 50px;
+        padding: 20px;
+        background-color: #1f1f1f;
+        border-radius: 10px;
+        color: #ffffff;
+    }
+
+    .comments-section h2 {
+        font-size: 1.5rem;
+        color: #ffffff;
+        margin-bottom: 20px;
+    }
+
+    .suggestions {
+        margin-top: 50px;
+    }
+
+    .suggestions h2 {
+        font-size: 1.5rem;
+        color: #ffffff;
+        margin-bottom: 20px;
+    }
+
+    .suggestions .video-content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+
+    .suggestions .video-card {
+        background-color: #1f1f1f;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+        max-width: 300px;
+        text-align: left;
+        margin: 10px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .suggestions .video-card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.7);
+    }
+
+    .suggestions .video-card img {
+        width: 100%;
+        height: auto;
+    }
+
+    .suggestions .video-title {
+        font-size: 1rem;
+        font-weight: bold;
+        color: #ffffff;
+        padding: 10px;
+    }
 </style>
 
 <div class="container">
-    <div class="video-header">
+    <a href="{{ path('app_listeallvideo') }}" class="back-button mt-3">← Retour</a>
+
+    <div class="video-header mt-3">
         <h1>{{ laVideo.titre }}</h1>
     </div>
 
@@ -125,11 +192,30 @@
     </div>
 
     <div class="video-details">
-        <h2 class="video-title">Détails de la Vidéo</h2>
+        <h2 class="video-title">{{ laVideo.titre }}</h2>
         <p class="video-info"><strong>Créateur :</strong> {{ laVideo.createur }}</p>
         <p class="video-info"><strong>Date de publication :</strong> {{ laVideo.datePublication|date('d/m/Y H:i') }}</p>
     </div>
 
-    
+    <div class="comments-section">
+        <h2>Commentaires</h2>
+        <p>Les commentaires seront affichés ici.</p>
+        <!-- Logique pour afficher et ajouter des commentaires sera ajoutée ici -->
+    </div>
+
+    <div class="suggestions">
+    <h2>Suggestions de vidéos</h2>
+    <div class="video-content">
+        {% for laVideo in lesVideos|slice(0, 3)  %}
+            <div class="video-card">
+                <a href="{{path('allficheVideo', { id: laVideo.id })}}" target="_blank">
+                    <img src="https://img.youtube.com/vi/{{ laVideo.youtubeId }}/0.jpg" alt="Aperçu de la vidéo {{ laVideo.titre }}" width="300">
+                 </a>
+                <div class="video-title">{{ laVideo.titre }}</div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
 </div>
 {% endblock %}

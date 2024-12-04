@@ -21,10 +21,13 @@ class AllVideoController extends AbstractController
     }
 
     #[Route('/allvideo/{id}', name: 'allficheVideo', methods:("GET"))]
-    public function ficheVideo(Video $video): Response
+    public function ficheVideo(Video $video, VideoRepository $repo): Response
     {
+        $videos = $repo->findBy([], ['datePublication' => 'DESC']);
+
         return $this->render('all_video/ficheVideo.html.twig', [
-            'laVideo' => $video
+            'laVideo' => $video,
+            'lesVideos' => $videos,
         ]);
     }
 

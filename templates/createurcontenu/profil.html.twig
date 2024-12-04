@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil de {{ user.pseudo }}{% endblock %}
+
+{% block body %}
+<style>
+    .profile-container {
+        max-width: 900px;
+        margin: 0 auto;
+        background-color: var(--color-bg);
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        color: #ffffff;
+        font-family: Arial, sans-serif;
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .profile-picture {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid var(--color-primary);
+    }
+
+    .profile-details {
+        flex-grow: 1;
+    }
+
+    .profile-details h1 {
+        margin: 0;
+        font-size: 2.5em;
+        color: var(--color-primary);
+    }
+
+    .profile-details p {
+        margin: 5px 0;
+        font-size: 1.2em;
+        color: var(--color-tertiary);
+    }
+
+    .profile-content {
+        margin-top: 20px;
+    }
+
+    .section-title {
+        color: var(--color-secondary);
+        font-size: 1.5em;
+        margin-bottom: 10px;
+    }
+
+    .comment-list, .video-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .comment-item, .video-item {
+        padding: 10px;
+        margin-bottom: 10px;
+        background-color: var(--color-tertiary);
+        border-radius: 5px;
+    }
+</style>
+
+<div class="profile-container">
+    <div class="profile-header">
+        {# <img 
+            src="{{ user.photo ? asset('uploads/profile_pictures/' ~ user.photo) : asset('image/default-profile.png') }}" 
+            alt="Photo de {{ user.pseudo }}" 
+            class="profile-picture"> #}
+        <div class="profile-details">
+            <h1>Front page de profil</h1>
+            <p><strong>Nom :</strong> </p>
+            <p><strong>Email :</strong> </p>
+            <p><strong>Date d'inscription :</strong></p>
+        </div>
+    </div>
+
+    <div class="profile-content">
+        <div class="section">
+            <h2 class="section-title">Commentaires postés</h2>
+            <ul class="comment-list">
+                {# {% for commentaire in user.commentaires %}
+                    <li class="comment-item">
+                        <p>{{ commentaire.contenu }}</p>
+                        <small>Posté le {{ commentaire.date|date('d/m/Y') }}</small>
+                    </li>
+                {% else %}
+                    <p>Aucun commentaire disponible.</p>
+                {% endfor %} #}
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Vidéos aimées</h2>
+            <ul class="video-list">
+                {# {% for video in user.videos %}
+                    <li class="video-item">
+                        <p>{{ video.title }}</p>
+                        <small>Ajouté le {{ video.date|date('d/m/Y') }}</small>
+                    </li>
+                {% else %}
+                    <p>Aucune vidéo aimée pour le moment.</p>
+                {% endfor %} #}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
