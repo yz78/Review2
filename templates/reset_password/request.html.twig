@@ -1,0 +1,153 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réinitialisez votre mot de passe{% endblock %}
+
+{% block body %}
+    {% for flash_error in app.flashes('reset_password_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+    {% endfor %}
+    <div style="margin-top: 500 px"></div>
+    <h1>Réinitialisez votre mot de passe</h1>
+
+    {{ form_start(requestForm) }}
+        {{ form_row(requestForm.email) }}
+        <div>
+            <small>
+                Entrez votre adresse e-mail et nous vous enverrons un
+                lien pour réinitialiser votre mot de passe.
+            </small>
+        </div>
+
+        <button class="btn btn-primary">Envoyer un e-mail de réinitialisation du mot de passe</button>
+    {{ form_end(requestForm) }}
+
+    <style>
+/* Styles généraux */
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f6f9; /* Fond doux et moderne */
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(to top right, #e3f2fd, #90caf9); /* Dégradé de fond */
+}
+
+/* Conteneur principal */
+.container {
+    width: 100%;
+    max-width: 480px;
+    margin: 20px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Titre principal */
+h1 {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    color: #007bff;
+    text-transform: uppercase;
+}
+
+/* Alertes */
+.alert {
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+    color: #721c24;
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    font-size: 14px;
+    text-align: left;
+}
+
+/* Formulaire */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+form label {
+    font-size: 16px;
+    font-weight: 500;
+    text-align: left;
+    margin-bottom: 8px;
+    color: #444;
+}
+
+form input[type="email"] {
+    padding: 12px;
+    font-size: 14px;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+form input[type="email"]:focus {
+    border-color: #007bff;
+    outline: none;
+    background-color: #e3f2fd;
+}
+
+form small {
+    font-size: 13px;
+    color: #888;
+    margin-top: -8px;
+    text-align: left;
+}
+
+/* Bouton */
+button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+/* Liens */
+a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Espacement de la page */
+body > div {
+    margin-top: 50px; /* Enlève le style inline dans Twig */
+}
+
+    </style>
+{% endblock %}
