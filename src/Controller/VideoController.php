@@ -62,7 +62,6 @@ class VideoController extends AbstractController
 
             $manager->persist($video);
             $manager->flush();
-
             $this->addFlash("success", "La vidéo a bien été $mode !");
             return $this->redirectToRoute('app_listevideo');
         }

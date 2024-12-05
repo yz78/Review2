@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Profil de l'Administrateur{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1>Profil de {{ user.prenom }} {{ user.nom }}</h1>
+    
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h3 class="mb-0">{{ user.pseudo }}</h3>
+            <p class="mb-0">Rôle : {{ user.roles|first }}</p>
+        </div>
+        <div class="card-body">
+            {% if user.photo %}
+                <img src="{{ asset('uploads/photos/' ~ user.photo) }}" class="img-fluid rounded-circle mb-3" alt="Photo de profil" width="150">
+            {% else %}
+                <img src="{{ asset('images/default-avatar.png') }}" class="img-fluid rounded-circle mb-3" alt="Photo de profil" width="150">
+            {% endif %}
+            <p><strong>Email :</strong> {{ user.email }}</p>
+            <p><strong>Date de naissance :</strong> {{ user.dateNaissance|date('d/m/Y') }}</p>
+            <p><strong>Date d'inscription :</strong> {{ user.dateInscription|date('d/m/Y') }}</p>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <a href="#" class="btn btn-secondary">Retour au tableau de bord</a>
+        <a href="#" class="btn btn-warning">Modifier le profil</a>
+    </div>
+</div>
+{% endblock %}
