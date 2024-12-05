@@ -5,6 +5,7 @@
 {% block body %}
 <style>
     body {
+        margin-top: 100px;
         background-color: var(--color-bg);
         color: white;
         font-family: Arial, sans-serif;
@@ -76,10 +77,7 @@
 
     .btn-small {
         padding: 8px 15px; /* Réduction des marges intérieures */
-        margin-left : 20px;
-        text-transform: uppercase;
-        font-weight: bold;
-        max-width: 250px; /* Le bouton s'ajuste automatiquement au contenu */
+        max-width: 200px; /* Le bouton s'ajuste automatiquement au contenu */
         min-width: 100px; /* Optionnel : largeur minimale pour uniformité */
     }
 
@@ -201,8 +199,94 @@ iframe {
         height: 200px;
     }
 
+    .filter-container {
+        background-color: #2a2526; /* Une teinte légèrement plus claire que le fond global */
+        padding: 20px;
+        border-radius: 10px;
+        margin: 20px auto;
+        max-width: 600px;
+        text-align: center;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Conteneur global du filtre */
+.filter-wrapper {
+    margin-top: 100px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+}
+
+/* Conteneur du formulaire de filtre */
+.filter-form {
+    background-color: #2a2526;
+    padding: 10px 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Groupe contenant les éléments du filtre */
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Champ de sélection */
+.filter-select {
+    background-color: #3a3a3a;
+    color: white;
+    border: 1px solid var(--color-primary);
+    border-radius: 5px;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+.filter-select:hover,
+.filter-select:focus {
+    border-color: var(--color-accent);
+    background-color: #4a4a4a;
+    outline: none;
+}
+
+/* Bouton Filtrer */
+.filter-button {
+    background-color: var(--color-primary);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 15px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.filter-button:hover {
+    background-color: var(--color-accent);
+    transform: scale(1.1);
+}
+
+
+
 </style>
 
+<div class="filter-wrapper">
+    <div class="filter-form">
+        {{ form_start(filterForm, { 'attr': { 'class': 'form-inline' } }) }}
+            <div class="filter-group">
+                {{ form_row(filterForm.categories, { 'label': false, 'attr': { 'class': 'filter-select', 'placeholder': 'Sélectionnez une catégorie' } }) }}
+                <button type="submit" class="btn filter-button">Filtrer</button>
+                <a href="{{ path('app_listeallvideo') }}" class="btn btn-outline-light btn-small">Réinitialiser</a>
+            </div>
+        {{ form_end(filterForm) }}
+    </div>
+</div>
 <h1 style="color: #ffffff;">Toutes les Vidéos</h1>
 
 
