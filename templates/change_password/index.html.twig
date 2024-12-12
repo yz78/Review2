@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier votre mot de passe{% endblock %}
+
+{% block body %}
+<style>
+    body {
+        margin-top: 100px;
+        background-color: #f8f9fa;
+        font-family: 'Roboto', sans-serif;
+    }
+
+    .password-container {
+        max-width: 500px;
+        margin: auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .password-container h1 {
+        text-align: center;
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .btn-primary {
+        width: 100%;
+        background-color: #5c19c4;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        border-radius: 5px;
+        padding: 10px;
+    }
+
+    .alert {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="password-container">
+    <h1>Modifier votre mot de passe</h1>
+
+    {{ form_start(form) }}
+        <div class="form-group">
+            {{ form_label(form.currentPassword) }}
+            {{ form_widget(form.currentPassword, {'attr': {'class': 'form-control', 'placeholder': 'Saisissez votre mot de passe actuel'}}) }}
+            {{ form_errors(form.currentPassword) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.newPassword) }}
+            {{ form_widget(form.newPassword, {'attr': {'class': 'form-control', 'placeholder': 'Entrez votre nouveau mot de passe'}}) }}
+            {{ form_errors(form.newPassword) }}
+        </div>
+        <div class="form-group">
+            {{ form_label(form.confirmPassword) }}
+            {{ form_widget(form.confirmPassword, {'attr': {'class': 'form-control', 'placeholder': 'Confirmez votre nouveau mot de passe'}}) }}
+            {{ form_errors(form.confirmPassword) }}
+        </div>
+        <button type="submit" class="btn btn-primary">Mettre à jour</button>
+    {{ form_end(form) }}
+
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger">{{ message }}</div>
+    {% endfor %}
+
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+</div>
+{% endblock %}
