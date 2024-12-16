@@ -1,6 +1,7 @@
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Profil de l'Administrateur{% endblock %}
+{% block title %}Mon Profil{% endblock %}
 
 {% block body %}
 <div class="container mt-5">
@@ -24,8 +25,8 @@
     </div>
 
     <div class="mt-4">
-        <a href="#" class="btn btn-secondary">Retour au tableau de bord</a>
-        <a href="#" class="btn btn-warning">Modifier le profil</a>
+        <a href="{{ path('app_dashboard') }}" class="btn btn-secondary">Retour au tableau de bord</a>
+        <a href="{{ path('app_profile_edit') }}" class="btn btn-warning">Modifier le profil</a>
     </div>
 </div>
 {% endblock %}
