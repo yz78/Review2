@@ -149,12 +149,12 @@ body {
                 <img src="{{ asset('image/profil.webp') }}" alt="Profil" class="rounded-circle" width="40" height="40">
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{{ path('app_admin_profil') }}">Mon Profil</a>
+                <a class="dropdown-item" href="{{ path('app_createur_contenu_profil', {id: app.user.id}) }}">Mon Profil</a>
                 <a class="dropdown-item" href="#">Paramètres</a>
                 <a class="dropdown-item" href="#">Mes favoris</a>
                 <a class="dropdown-item" href="{{ path('app_change_password') }}">Changer de mot de passe</a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Déconnexion</a>
+                <a class="dropdown-item" href="{{ path('app_logout') }}">Déconnexion</a>
             </div>
         </div>
         </div>
