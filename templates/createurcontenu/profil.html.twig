@@ -20,9 +20,22 @@
             <p><strong>Pseudo :</strong> {{ user.pseudo }}</p>
             <p><strong>Date de naissance :</strong> {{ user.dateNaissance|date('d/m/Y') }}</p>
             <p><strong>Date d'inscription :</strong> {{ user.dateInscription|date('d/m/Y') }}</p>
-            <p><strong>Vérifié :</strong> {{ user.isVerified ? 'Oui' : 'Non' }}</p>
         </div>
     </div>
+
+    <!-- Formulaire de modification -->
+            <div class="col-md-6">
+                <h3>Modifier vos informations</h3>
+                {{ form_start(form) }}
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.nom) }}
+                    {{ form_row(form.prenom) }}
+                    {{ form_row(form.pseudo) }}
+                    <div class="text-end">
+                        {{ form_row(form.submit) }}
+                    </div>
+                {{ form_end(form) }}
+            </div>
 
     <h2 class="mt-4">Activité récente</h2>
     <div class="row">
