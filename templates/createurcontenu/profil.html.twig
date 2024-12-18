@@ -3,112 +3,60 @@
 {% block title %}Profil de {{ user.pseudo }}{% endblock %}
 
 {% block body %}
-<style>
-    .profile-container {
-        max-width: 900px;
-        margin: 0 auto;
-        background-color: var(--color-bg);
-        border-radius: 10px;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        color: #ffffff;
-        font-family: Arial, sans-serif;
-    }
-
-    .profile-header {
-        display: flex;
-        align-items: center;
-        gap: 20px;
-    }
-
-    .profile-picture {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        object-fit: cover;
-        border: 3px solid var(--color-primary);
-    }
-
-    .profile-details {
-        flex-grow: 1;
-    }
-
-    .profile-details h1 {
-        margin: 0;
-        font-size: 2.5em;
-        color: var(--color-primary);
-    }
-
-    .profile-details p {
-        margin: 5px 0;
-        font-size: 1.2em;
-        color: var(--color-tertiary);
-    }
-
-    .profile-content {
-        margin-top: 20px;
-    }
-
-    .section-title {
-        color: var(--color-secondary);
-        font-size: 1.5em;
-        margin-bottom: 10px;
-    }
-
-    .comment-list, .video-list {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-    }
-
-    .comment-item, .video-item {
-        padding: 10px;
-        margin-bottom: 10px;
-        background-color: var(--color-tertiary);
-        border-radius: 5px;
-    }
-</style>
-
-<div class="profile-container">
-    <div class="profile-header">
-        {# <img 
-            src="{{ user.photo ? asset('uploads/profile_pictures/' ~ user.photo) : asset('image/default-profile.png') }}" 
-            alt="Photo de {{ user.pseudo }}" 
-            class="profile-picture"> #}
-        <div class="profile-details">
-            <h1>Front page de profil</h1>
-            <p><strong>Nom :</strong> </p>
-            <p><strong>Email :</strong> </p>
-            <p><strong>Date d'inscription :</strong></p>
+<div class="container mt-5">
+    <h1>Profil de {{ user.pseudo }}</h1>
+    <div class="row">
+        <div class="col-md-4">
+            {% if user.photo %}
+                <img src="{{ asset('uploads/photos/' ~ user.photo) }}" alt="Photo de {{ user.pseudo }}" class="img-fluid rounded-circle">
+            {% else %}
+                <img src="{{ asset('uploads/photos/default.png') }}" alt="Photo par défaut" class="img-fluid rounded-circle">
+            {% endif %}
+        </div>
+        <div class="col-md-8">
+            <p><strong>Nom :</strong> {{ user.nom }}</p>
+            <p><strong>Prénom :</strong> {{ user.prenom }}</p>
+            <p><strong>Email :</strong> {{ user.email }}</p>
+            <p><strong>Pseudo :</strong> {{ user.pseudo }}</p>
+            <p><strong>Date de naissance :</strong> {{ user.dateNaissance|date('d/m/Y') }}</p>
+            <p><strong>Date d'inscription :</strong> {{ user.dateInscription|date('d/m/Y') }}</p>
         </div>
     </div>
 
-    <div class="profile-content">
-        <div class="section">
-            <h2 class="section-title">Commentaires postés</h2>
-            <ul class="comment-list">
-                {# {% for commentaire in user.commentaires %}
-                    <li class="comment-item">
-                        <p>{{ commentaire.contenu }}</p>
-                        <small>Posté le {{ commentaire.date|date('d/m/Y') }}</small>
-                    </li>
+    <!-- Formulaire de modification -->
+            <div class="col-md-6">
+                <h3>Modifier vos informations</h3>
+                {{ form_start(form) }}
+                    {{ form_row(form.email) }}
+                    {{ form_row(form.nom) }}
+                    {{ form_row(form.prenom) }}
+                    {{ form_row(form.pseudo) }}
+                    <div class="text-end">
+                        {{ form_row(form.submit) }}
+                    </div>
+                {{ form_end(form) }}
+            </div>
+
+    <h2 class="mt-4">Activité récente</h2>
+    <div class="row">
+        <div class="col-md-6">
+            <h3>Commentaires</h3>
+            <ul>
+                {% for commentaire in user.commentaires %}
+                    <li>{{ commentaire.content|slice(0, 100) }}...</li>
                 {% else %}
-                    <p>Aucun commentaire disponible.</p>
-                {% endfor %} #}
+                    <li>Aucun commentaire pour l'instant.</li>
+                {% endfor %}
             </ul>
         </div>
-
-        <div class="section">
-            <h2 class="section-title">Vidéos aimées</h2>
-            <ul class="video-list">
-                {# {% for video in user.videos %}
-                    <li class="video-item">
-                        <p>{{ video.title }}</p>
-                        <small>Ajouté le {{ video.date|date('d/m/Y') }}</small>
-                    </li>
+        <div class="col-md-6">
+            <h3>Vidéos likées</h3>
+            <ul>
+                {% for video in user.videos %}
+                    <li>{{ video.title }}</li>
                 {% else %}
-                    <p>Aucune vidéo aimée pour le moment.</p>
-                {% endfor %} #}
+                    <li>Aucune vidéo likée pour l'instant.</li>
+                {% endfor %}
             </ul>
         </div>
     </div>
