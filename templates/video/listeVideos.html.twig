@@ -244,3 +244,56 @@ iframe {
 </div>
 
 {% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const likeButtons = document.querySelectorAll('.like-btn');
+
+            function updateButtonState(likeBtn, data) {
+                const likeCount = likeBtn.querySelector('.like-count');
+                likeCount.textContent = data.likes;
+                likeBtn.classList.toggle('active', data.isLiked);
+                likeBtn.disabled = false;
+            }
+
+            function handleLikeAction(button) {
+                const videoId = button.dataset.videoId;
+                const likeBtn = document.getElementById(`like-btn-${videoId}`);
+
+                likeBtn.disabled = true;
+
+                fetch(`/video/${videoId}/like`, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur réseau');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        updateButtonState(likeBtn, data);
+                    } else {
+                        throw new Error(data.message || 'Une erreur est survenue');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur est survenue lors de l\'action');
+                    likeBtn.disabled = false;
+                });
+            }
+
+            likeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    handleLikeAction(this);
+                });
+            });
+        });
+    </script>
+{% endblock %}

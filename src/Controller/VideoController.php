@@ -5,11 +5,13 @@ namespace App\Controller;
 use App\Form\VideoType;
 use App\Repository\VideoRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\Video;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\Annotation\IsGranted;
 
 class VideoController extends AbstractController
 {
@@ -88,6 +90,27 @@ class VideoController extends AbstractController
     {
         return $this->render('video/ficheVideo.html.twig', [
             'laVideo' => $video
+        ]);
+    }
+
+    #[Route('/video/{id}/like', name: 'video_like', methods: ['POST'])]
+    #[IsGranted('ROLE_USER')]
+    public function like(Video $video, EntityManagerInterface $entityManager): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+
+        if ($video->getLikeVideo()->contains($user)) {
+            $video->removeLikeVideo($user);
+        } else {
+            $video->addLikeVideo($user);
+        }
+
+        $entityManager->flush();
+
+        return $this->json([
+            'success' => true,
+            'likes' => $video->getLikesCount(),
         ]);
     }
 }

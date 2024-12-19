@@ -1,0 +1,19 @@
+.delete-comment-btn {
+    background: none;
+    border: none;
+    color: #dc3545;
+    cursor: pointer;
+    padding: 5px 10px;
+    margin-left: 10px;
+    transition: color 0.3s ease;
+}
+
+.delete-comment-btn:hover {
+    color: #c82333;
+}
+
+.comment-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

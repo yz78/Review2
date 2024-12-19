@@ -1,0 +1,203 @@
+{% block stylesheets %}
+<style>
+    .comment-actions button {
+        background: none;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 8px 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-right: 10px;
+    }
+
+    .like-btn, .dislike-btn {
+        color: #666;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .like-btn:hover {
+        background-color: #e8f5e9;
+        border-color: #4CAF50;
+        color: #4CAF50;
+    }
+
+    .dislike-btn:hover {
+        background-color: #ffebee;
+        border-color: #f44336;
+        color: #f44336;
+    }
+
+    .like-btn.active {
+        background-color: #4CAF50;
+        color: white;
+        border-color: #4CAF50;
+    }
+
+    .dislike-btn.active {
+        background-color: #f44336;
+        color: white;
+        border-color: #f44336;
+    }
+
+    .comment-actions {
+        margin-top: 10px;
+    }
+
+    .comment-actions button i {
+        font-size: 1.1em;
+    }
+
+    .comment-actions button:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+</style>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const likeButtons = document.querySelectorAll('.like-btn');
+            const dislikeButtons = document.querySelectorAll('.dislike-btn');
+
+            function updateButtonStates(likeBtn, dislikeBtn, data) {
+                // Mettre à jour les compteurs
+                const likeCount = likeBtn.querySelector('.like-count');
+                const dislikeCount = dislikeBtn.querySelector('.dislike-count');
+                
+                likeCount.textContent = data.likes;
+                dislikeCount.textContent = data.dislikes;
+
+                // Mettre à jour les états des boutons
+                likeBtn.classList.toggle('active', data.isLiked);
+                dislikeBtn.classList.toggle('active', data.isDisliked);
+
+                // Activer/désactiver les boutons pendant l'action
+                likeBtn.disabled = false;
+                dislikeBtn.disabled = false;
+            }
+
+            function handleAction(button, actionType) {
+                const commentId = button.dataset.commentId;
+                const likeBtn = document.getElementById(`like-btn-${commentId}`);
+                const dislikeBtn = document.getElementById(`dislike-btn-${commentId}`);
+
+                // Désactiver les boutons pendant l'action
+                likeBtn.disabled = true;
+                dislikeBtn.disabled = true;
+
+                fetch(`/commentaire/${commentId}/${actionType}`, {
+                    method: 'POST',
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur réseau');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        updateButtonStates(likeBtn, dislikeBtn, data);
+                    } else {
+                        throw new Error(data.message || 'Une erreur est survenue');
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur:', error);
+                    alert('Une erreur est survenue lors de l\'action');
+                    // Réactiver les boutons en cas d'erreur
+                    likeBtn.disabled = false;
+                    dislikeBtn.disabled = false;
+                });
+            }
+
+            likeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    handleAction(this, 'like');
+                });
+            });
+
+            dislikeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    handleAction(this, 'dislike');
+                });
+            });
+        });
+    </script>
+{% endblock %}
+
+{# Formulaire d'ajout de commentaire #}
+{% if is_granted('ROLE_USER') %}
+    <div class="comment-form mb-4">
+        <form action="{{ path('video_comment_add', {'id': video.id}) }}" method="POST">
+            <div class="form-group">
+                <textarea name="content" class="form-control" rows="3" placeholder="Ajouter un commentaire..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Publier</button>
+        </form>
+    </div>
+{% else %}
+    <div class="alert alert-info">
+        <a href="{{ path('app_login') }}">Connectez-vous</a> pour laisser un commentaire.
+    </div>
+{% endif %}
+
+{# Liste des commentaires #}
+<div class="comments-section">
+    {% if comments|length > 0 %}
+        {% for comment in comments %}
+            <div class="comment" id="comment-{{ comment.id }}">
+                <div class="comment-header">
+                    {% for user in comment.posteCom %}
+                        <strong>{{ user.email }}</strong>
+                    {% endfor %}
+                    <span class="comment-date">{{ comment.datePublication|date('d/m/Y H:i') }}</span>
+                </div>
+                <div class="comment-content">
+                    {{ comment.contenu }}
+                </div>
+                <div class="comment-actions">
+                    {% if is_granted('ROLE_USER') %}
+                        <button class="like-btn {% if app.user and comment.getLikeCom().contains(app.user) %}active{% endif %}" 
+                                id="like-btn-{{ comment.id }}" 
+                                data-comment-id="{{ comment.id }}"
+                                title="J'aime">
+                            <i class="fas fa-thumbs-up"></i>
+                            <span class="like-count">{{ comment.likesCount }}</span>
+                        </button>
+                        <button class="dislike-btn {% if app.user and comment.getDislikeCom().contains(app.user) %}active{% endif %}" 
+                                id="dislike-btn-{{ comment.id }}" 
+                                data-comment-id="{{ comment.id }}"
+                                title="Je n'aime pas">
+                            <i class="fas fa-thumbs-down"></i>
+                            <span class="dislike-count">{{ comment.dislikesCount }}</span>
+                        </button>
+                    {% else %}
+                        <div class="comment-stats">
+                            <span title="J'aime"><i class="fas fa-thumbs-up"></i> {{ comment.likesCount }}</span>
+                            <span title="Je n'aime pas"><i class="fas fa-thumbs-down"></i> {{ comment.dislikesCount }}</span>
+                        </div>
+                        <small class="text-muted">
+                            <a href="{{ path('app_login') }}">Connectez-vous</a> pour interagir
+                        </small>
+                    {% endif %}
+
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <button class="delete-comment-btn" 
+                                data-comment-id="{{ comment.id }}"
+                                title="Supprimer ce commentaire">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-muted">Aucun commentaire pour le moment. Soyez le premier à commenter !</p>
+    {% endif %}
+</div>

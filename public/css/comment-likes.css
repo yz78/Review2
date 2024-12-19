@@ -1,0 +1,57 @@
+.comment {
+    margin-bottom: 1rem;
+    padding: 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+}
+
+.comment-content {
+    margin-bottom: 0.5rem;
+}
+
+.comment-metadata {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.comment-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.like-btn,
+.dislike-btn {
+    background: none;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    color: #666;
+    transition: color 0.2s;
+}
+
+.like-btn:hover,
+.like-btn.active {
+    color: #4CAF50;
+}
+
+.dislike-btn:hover,
+.dislike-btn.active {
+    color: #f44336;
+}
+
+.comment-stats {
+    display: flex;
+    gap: 1rem;
+}
+
+.comment-stats span {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}

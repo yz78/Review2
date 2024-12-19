@@ -60,6 +60,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     private $likecommentaires;
 
+    #[ORM\ManyToMany(targetEntity: Commentaire::class, inversedBy: 'dislikeCom')]
+    #[ORM\JoinTable(name: 'dislikeCom')]
+    private $dislikeCommentaires;
+
     #[ORM\Column(type: 'boolean')]
     private $isVerified = false;
 
@@ -68,6 +72,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->commentaires = new ArrayCollection();
         $this->videos = new ArrayCollection();
         $this->likecommentaires = new ArrayCollection();
+        $this->dislikeCommentaires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -297,7 +302,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if (!$this->likecommentaires->contains($likecommentaire)) {
             $this->likecommentaires[] = $likecommentaire;
-            
         }
 
         return $this;
@@ -306,9 +310,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeLikecommentaire(Commentaire $likecommentaire): self
     {
         if ($this->likecommentaires->removeElement($likecommentaire)) {
-            
         }
 
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Commentaire>
+     */
+    public function getDislikeCommentaires(): Collection
+    {
+        return $this->dislikeCommentaires;
+    }
+
+    public function addDislikeCommentaire(Commentaire $commentaire): self
+    {
+        if (!$this->dislikeCommentaires->contains($commentaire)) {
+            $this->dislikeCommentaires[] = $commentaire;
+        }
+        return $this;
+    }
+
+    public function removeDislikeCommentaire(Commentaire $commentaire): self
+    {
+        $this->dislikeCommentaires->removeElement($commentaire);
         return $this;
     }
 

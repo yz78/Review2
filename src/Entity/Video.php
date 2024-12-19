@@ -30,6 +30,9 @@ class Video
     #[ORM\Column(type: 'string', nullable: true)]
     private $youtubeId;
 
+    #[ORM\Column(type: 'integer')]
+    private $likesCount = 0;
+
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'videos')]
     private $likeVideo;
 
@@ -40,10 +43,14 @@ class Video
     #[ORM\ManyToMany(targetEntity: Categorie::class, inversedBy: 'videos')]
     private $categories;
 
+    #[ORM\OneToMany(mappedBy: 'video', targetEntity: Commentaire::class, orphanRemoval: true)]
+    private $commentaires;
+
     public function __construct()
     {
         $this->likeVideo = new ArrayCollection();
         $this->categories = new ArrayCollection();
+        $this->commentaires = new ArrayCollection();
         $this->datePublication = new \DateTime();
     }
 
@@ -100,6 +107,17 @@ class Video
         return $this;
     }
 
+    public function getLikesCount(): int
+    {
+        return $this->likesCount;
+    }
+
+    public function setLikesCount(int $likesCount): self
+    {
+        $this->likesCount = $likesCount;
+        return $this;
+    }
+
     /**
      * @return Collection<int, User>
      */
@@ -108,18 +126,21 @@ class Video
         return $this->likeVideo;
     }
 
-    public function addLikeVideo(User $likeVideo): self
+    public function addLikeVideo(User $user): self
     {
-        if (!$this->likeVideo->contains($likeVideo)) {
-            $this->likeVideo[] = $likeVideo;
+        if (!$this->likeVideo->contains($user)) {
+            $this->likeVideo[] = $user;
+            $this->likesCount++;
         }
 
         return $this;
     }
 
-    public function removeLikeVideo(User $likeVideo): self
+    public function removeLikeVideo(User $user): self
     {
-        $this->likeVideo->removeElement($likeVideo);
+        if ($this->likeVideo->removeElement($user)) {
+            $this->likesCount--;
+        }
 
         return $this;
     }
@@ -168,6 +189,33 @@ class Video
     public function setYoutubeId(?string $youtubeId): self
     {
         $this->youtubeId = $youtubeId;
+
+        return $this;
+    }
+
+    public function getCommentaires(): Collection
+    {
+        return $this->commentaires;
+    }
+
+    public function addCommentaire(Commentaire $commentaire): self
+    {
+        if (!$this->commentaires->contains($commentaire)) {
+            $this->commentaires[] = $commentaire;
+            $commentaire->setVideo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCommentaire(Commentaire $commentaire): self
+    {
+        if ($this->commentaires->removeElement($commentaire)) {
+            // set the owning side to null (unless already changed)
+            if ($commentaire->getVideo() === $this) {
+                $commentaire->setVideo(null);
+            }
+        }
 
         return $this;
     }

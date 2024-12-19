@@ -18,7 +18,7 @@ class Commentaire
     #[ORM\Column(type: 'text')]
     private $contenu;
 
-    #[ORM\Column(type: 'date')]
+    #[ORM\Column(type: 'datetime')]
     private $datePublication;
 
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'commentaires')]
@@ -27,10 +27,27 @@ class Commentaire
     #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'likecommentaires')]
     private $likeCom;
 
+    #[ORM\ManyToMany(targetEntity: User::class, mappedBy: 'dislikeCommentaires')]
+    private $dislikeCom;
+
+    #[ORM\Column(type: 'integer')]
+    private $likesCount = 0;
+
+    #[ORM\Column(type: 'integer')]
+    private $dislikesCount = 0;
+
+    #[ORM\ManyToOne(targetEntity: Video::class, inversedBy: 'commentaires')]
+    #[ORM\JoinColumn(nullable: false)]
+    private $video;
+
     public function __construct()
     {
         $this->posteCom = new ArrayCollection();
         $this->likeCom = new ArrayCollection();
+        $this->dislikeCom = new ArrayCollection();
+        $this->datePublication = new \DateTime();
+        $this->likesCount = 0;
+        $this->dislikesCount = 0;
     }
 
     public function getId(): ?int
@@ -94,21 +111,140 @@ class Commentaire
         return $this->likeCom;
     }
 
-    public function addLikeCom(User $likeCom): self
+    /**
+     * Ajoute un like et retire le dislike si présent
+     */
+    public function addLikeCom(User $user): self
     {
-        if (!$this->likeCom->contains($likeCom)) {
-            $this->likeCom[] = $likeCom;
-            $likeCom->addLikeCom($this);
+        // Si l'utilisateur a déjà liké, on ne fait rien
+        if ($this->likeCom->contains($user)) {
+            return $this;
         }
+
+        // Si l'utilisateur a disliké, on retire le dislike
+        if ($this->dislikeCom->contains($user)) {
+            $this->dislikeCom->removeElement($user);
+            $user->removeDislikeCommentaire($this);
+            $this->dislikesCount = max(0, $this->dislikesCount - 1);
+        }
+
+        // Ajoute le like
+        $this->likeCom[] = $user;
+        $user->addLikecommentaire($this);
+        $this->likesCount = $this->likeCom->count();
 
         return $this;
     }
 
-    public function removeLikeCom(User $likeCom): self
+    public function removeLikeCom(User $user): self
     {
-        $this->likeCom->removeElement($likeCom);
-        $likecommentaire->removeLikecommentaire($this);
+        if ($this->likeCom->removeElement($user)) {
+            $user->removeLikecommentaire($this);
+            $this->likesCount = max(0, $this->likeCom->count());
+        }
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getDislikeCom(): Collection
+    {
+        return $this->dislikeCom;
+    }
+
+    /**
+     * Ajoute un dislike et retire le like si présent
+     */
+    public function addDislikeCom(User $user): self
+    {
+        // Si l'utilisateur a déjà disliké, on ne fait rien
+        if ($this->dislikeCom->contains($user)) {
+            return $this;
+        }
+
+        // Si l'utilisateur a liké, on retire le like
+        if ($this->likeCom->contains($user)) {
+            $this->likeCom->removeElement($user);
+            $user->removeLikecommentaire($this);
+            $this->likesCount = max(0, $this->likesCount - 1);
+        }
+
+        // Ajoute le dislike
+        $this->dislikeCom[] = $user;
+        $user->addDislikeCommentaire($this);
+        $this->dislikesCount = $this->dislikeCom->count();
 
         return $this;
+    }
+
+    public function removeDislikeCom(User $user): self
+    {
+        if ($this->dislikeCom->removeElement($user)) {
+            $user->removeDislikeCommentaire($this);
+            $this->dislikesCount = max(0, $this->dislikeCom->count());
+        }
+        return $this;
+    }
+
+    public function getLikesCount(): int
+    {
+        return $this->likesCount;
+    }
+
+    public function setLikesCount(int $count): self
+    {
+        $this->likesCount = $count;
+        return $this;
+    }
+
+    public function getDislikesCount(): int
+    {
+        return $this->dislikesCount;
+    }
+
+    public function setDislikesCount(int $count): self
+    {
+        $this->dislikesCount = $count;
+        return $this;
+    }
+
+    public function updateLikesCount(): self
+    {
+        $this->likesCount = $this->likeCom->count();
+        return $this;
+    }
+
+    public function updateDislikesCount(): self
+    {
+        $this->dislikesCount = $this->dislikeCom->count();
+        return $this;
+    }
+
+    public function getVideo(): ?Video
+    {
+        return $this->video;
+    }
+
+    public function setVideo(?Video $video): self
+    {
+        $this->video = $video;
+        return $this;
+    }
+
+    /**
+     * Vérifie si l'utilisateur a liké ce commentaire
+     */
+    public function isLikedByUser(User $user): bool
+    {
+        return $this->likeCom->contains($user);
+    }
+
+    /**
+     * Vérifie si l'utilisateur a disliké ce commentaire
+     */
+    public function isDislikedByUser(User $user): bool
+    {
+        return $this->dislikeCom->contains($user);
     }
 }
