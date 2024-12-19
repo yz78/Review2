@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+<div class="container mt-5 pt-5">
+    <h1 class="text-center text-light mb-4">Détails de l'Utilisateur</h1>
+
+    <table class="table table-dark table-bordered">
+        <tbody>
+            <tr>
+                <th scope="row">Id</th>
+                <td>{{ user.id }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Email</th>
+                <td>{{ user.email }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Roles</th>
+                <td>{{ user.roles ? user.roles|json_encode : 'Aucun' }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Nom</th>
+                <td>{{ user.nom }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Prénom</th>
+                <td>{{ user.prenom }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Date de Naissance</th>
+                <td>{{ user.dateNaissance ? user.dateNaissance|date('Y-m-d') : 'Non renseignée' }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Date d'Inscription</th>
+                <td>{{ user.dateInscription ? user.dateInscription|date('Y-m-d') : 'Non renseignée' }}</td>
+            </tr>
+            <tr>
+                <th scope="row">Photo</th>
+                <td>
+                    {% if user.photo %}
+                        <img src="{{ user.photo }}" alt="Photo de {{ user.nom }}" class="rounded-circle" width="100" height="100">
+                    {% else %}
+                        <span class="text-muted">Pas de photo</span>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Pseudo</th>
+                <td>{{ user.pseudo }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+        <a href="{{ path('app_gestion_profil_index') }}" class="btn btn-secondary">Retour à la liste</a>
+        <a href="{{ path('app_gestion_profil_edit', {'id': user.id}) }}" class="btn btn-warning">Modifier</a>
+        {{ include('gestion_profil/_delete_form.html.twig', {'class': 'd-inline-block'}) }}
+    </div>
+</div>
+{% endblock %}

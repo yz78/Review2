@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}GESTION{% endblock %}
+
+{% block body %}
+<div class="container mt-5 pt-5">
+    <h1 class="text-center text-primary mb-4">liste utilisateur</h1>
+    <table class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Email</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Date Naissance</th>
+                <th>Pseudo</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.nom }}</td>
+                    <td>{{ user.prenom }}</td>
+                    <td>{{ user.dateNaissance ? user.dateNaissance|date('Y-m-d') : '' }}</td>
+                    <td>{{ user.pseudo }}</td>
+                    <td>
+                        <a href="{{ path('app_gestion_profil_show', {'id': user.id}) }}" class="btn btn-outline-info btn-sm">voir</a>
+                        <a href="{{ path('app_gestion_profil_edit', {'id': user.id}) }}" class="btn btn-outline-warning btn-sm">modifier</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" class="text-center text-muted">No records found</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-center mt-4">
+        <a href="{{ path('app_gestion_profil_new') }}" class="btn btn-primary">Create New</a>
+    </div>
+</div>
+{% endblock %}
+

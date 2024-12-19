@@ -42,8 +42,8 @@ security:
          - { path: ^/profile, roles: ROLE_USER }
 
     role_hierarchy:
-        ROLE_VIEWER: ROLE_USER
-        ROLE_createurcontenue: ROLE_VIEWER
+     
+        ROLE_createurcontenue: ROLE_USER
         ROLE_ADMIN: ROLE_createurcontenue
 when@test:
     security:
