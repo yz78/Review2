@@ -39,6 +39,17 @@ class VideoRepository extends ServiceEntityRepository
         }
     }
 
+
+    public function findByCategories(array $categories)
+    {
+        $qb = $this->createQueryBuilder('v')
+            ->join('v.categories', 'c')
+            ->andWhere('c IN (:categories)')
+            ->setParameter('categories', $categories)
+            ->orderBy('v.datePublication', 'DESC');
+
+        return $qb->getQuery()->getResult();
+    }
 //    /**
 //     * @return Video[] Returns an array of Video objects
 //     */

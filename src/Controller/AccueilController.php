@@ -13,10 +13,12 @@ class AccueilController extends AbstractController
     public function index(VideoRepository $videoRepository): Response
     {
         $videos = $videoRepository->findAll();
+        $user = $this->getUser();
 
         return $this->render('accueil/index.html.twig', [
             'controller_name' => 'AccueilController',
             'lesVideos' => $videos,
+            'user' => $user,
         ]);
     }
 }
